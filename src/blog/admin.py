@@ -14,6 +14,7 @@ class TranslationInline(admin.StackedInline):
 class ArticleAdmin(admin.ModelAdmin):
     fields = ('image', 'tags', 'creation_date', )
     list_display = ('get_slug', 'tag_list', 'creation_date', )
+    list_filter = ('tags', )
     readonly_fields = ('creation_date', )
     inlines = (TranslationInline, )
 
