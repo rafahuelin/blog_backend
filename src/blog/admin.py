@@ -24,7 +24,7 @@ class ArticleAdmin(admin.ModelAdmin):
         return u", ".join(o.name for o in obj.tags.all())
     
     def get_slug(self, obj):
-        return obj.translation_set.first().slug
+        return obj.translation.first().slug
     
     def get_inline_instances(self, request, obj=None):
         return [inline(self.model, self.admin_site) for inline in self.inlines]

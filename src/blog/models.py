@@ -12,11 +12,14 @@ class Article(models.Model):
     creation_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
-        return self.translation_set.first().slug
+        return self.translation.first().slug
 
 
 class Translation(models.Model):
-    article = models.ForeignKey(Article, on_delete=DO_NOTHING, null=True)
+    article = models.ForeignKey(Article, on_delete=DO_NOTHING, null=True, related_name='translation')
     slug = models.SlugField(max_length=255)
     content = RichTextField()
     language = models.CharField(max_length=30, choices=settings.LANGUAGES)
+
+    def __str__(self) -> str:
+        return self.slug
