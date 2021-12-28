@@ -4,10 +4,19 @@
 {% block content %}
 <div class="">
     <h1>List</h1>
-    {% for article in articles %}
-    <h2>{{ article.id }} - {{ article.slug }}</h2>
-    <img src={{ article.image }} style='max-height: 100px' alt={{article.slug}}>
-    {{ article.content | safe }}
-    {% endfor %}
+    <div class="row g-5">
+        {% for article in articles %}
+        <div class="col-12 col-sm-6 col-lg-4">
+            <div class="card" style="width: 18rem;">
+                <img class="card-img-top" src={{ article.image }} alt={{ article.slug }}>
+                <div class="card-body">
+                <h5 class="card-title">{{ article.title }}</h5>
+                <p class="card-text">{{ article.content | safe |truncatewords:2|slice:"-4" }}...</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
 </div>
 {% endblock content %}

@@ -7,9 +7,11 @@ logger = logging.getLogger(__name__)
 def create_article_list(articles, language):
     articles_list = []
     for article in articles:
+        slug = article.translation.get(language=language).slug
         articles_list.append({
             'id': article.id,
-            'slug': article.translation.get(language=language).slug,
+            'slug': slug,
+            'title': slug.replace('-', ' ').title(),
             'content': article.translation.get(language=language).content,
             'image': f'media/{article.image}'
         })
