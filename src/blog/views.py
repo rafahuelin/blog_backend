@@ -1,5 +1,7 @@
 from django.shortcuts import render
-from blog.models import Article, Translation
+from blog.models import Article
+import logging
+logger = logging.getLogger(__name__)
 
 
 def create_article_list(articles, language):
@@ -15,12 +17,9 @@ def create_article_list(articles, language):
 
 
 def article_list(request):
-    filtered_english_articles = Article.objects.filter(translation__language='en')
-    english_articles = create_article_list(filtered_english_articles, 'en')
-    german_articles = create_article_list(filtered_english_articles, 'de')
+    filtered_articles = Article.objects.filter(translation__language=request.LANGUAGE_CODE)
+    articles = create_article_list(filtered_articles, request.LANGUAGE_CODE)
     context = {
-        'english_articles': english_articles,
-        'german_articles': german_articles,
+        'articles': articles,
     }
     return render(request, 'blog/article_list.html', context)
-

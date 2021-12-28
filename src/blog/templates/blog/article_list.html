@@ -4,12 +4,7 @@
 {% block content %}
 <div class="">
     <h1>List</h1>
-    {% for article in english_articles %}
-    <h2>{{ article.id }} - {{ article.slug }}</h2>
-    <img src={{ article.image }} style='max-height: 100px' alt={{article.slug}}>
-    {{ article.content | safe }}
-    {% endfor %}
-    {% for article in german_articles %}
+    {% for article in articles %}
     <h2>{{ article.id }} - {{ article.slug }}</h2>
     <img src={{ article.image }} style='max-height: 100px' alt={{article.slug}}>
     {{ article.content | safe }}
