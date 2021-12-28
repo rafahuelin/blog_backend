@@ -1,3 +1,10 @@
 from django.db import models
+from taggit.managers import TaggableManager
 
-# Create your models here.
+
+class Article(models.Model):
+    slug = models.SlugField(max_length=255)
+    image = models.ImageField()
+    tags = TaggableManager()
+    content = models.TextField()
+    creation_date = models.DateTimeField(auto_now_add=True)
