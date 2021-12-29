@@ -34,6 +34,7 @@ def article_detail(request, slug):
         language = Translation.objects.get(slug=slug).language
         context = {
             'content': article.translation.get(language=language).content,
+            'creation_date': article.creation_date,
             'image': f'/media/{article.image}',
             'slug': slug,
             'title': slug.replace('-', ' ').title(),
