@@ -21,21 +21,21 @@ def create_article_list(articles, language):
 
 
 def article_list(request):
-    tags = [t.slug for t in Tag.objects.all()]
+    all_tags = Tag.objects.all()
+    tags = [{ 'name': t.slug, 'selected': True } for t in all_tags ]
     selected_tags = []
     is_get_request = False
     if request.method == 'POST':
         for tag in tags:
-            tag_value = request.POST.get(tag)
-            if tag_value == 'on':
-                selected_tags.append(tag)
+            tag_value = request.POST.get(tag['name'])
+            selected = tag_value == 'on'
+            tag['selected'] = selected
+            if selected: selected_tags.append(tag['name'])
     elif request.method == 'GET':
-        selected_tags = tags
-        is_get_request = True
+        selected_tags = [t.slug for t in all_tags]
     articles_by_language = Article.objects.filter(translation__language=request.LANGUAGE_CODE)
     articles_by_language_and_tag = articles_by_language.filter(tags__slug__in=selected_tags).distinct()
     articles = create_article_list(articles_by_language_and_tag, request.LANGUAGE_CODE)
-    
 
     context = {
         'articles': articles,
