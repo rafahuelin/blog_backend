@@ -20,8 +20,11 @@ def create_article_list(articles, language):
 
 
 def article_list(request):
-    filtered_articles = Article.objects.filter(translation__language=request.LANGUAGE_CODE)
-    articles = create_article_list(filtered_articles, request.LANGUAGE_CODE)
+    selected_tags = ['first', 'coding']
+    articles_by_language = Article.objects.filter(translation__language=request.LANGUAGE_CODE)
+    articles_by_language_and_tag = articles_by_language.filter(tags__slug__in=selected_tags).distinct()
+    articles = create_article_list(articles_by_language_and_tag, request.LANGUAGE_CODE)
+
     context = {
         'articles': articles,
     }
