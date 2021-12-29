@@ -1,5 +1,6 @@
 from django.http.response import Http404
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
+from taggit.models import Tag
 from blog.models import Article, Translation
 import logging
 logger = logging.getLogger(__name__)
@@ -20,13 +21,27 @@ def create_article_list(articles, language):
 
 
 def article_list(request):
-    selected_tags = ['first', 'coding']
+    tags = [t.slug for t in Tag.objects.all()]
+    selected_tags = []
+    is_get_request = False
+    if request.method == 'POST':
+        for tag in tags:
+            tag_value = request.POST.get(tag)
+            if tag_value == 'on':
+                selected_tags.append(tag)
+    elif request.method == 'GET':
+        selected_tags = tags
+        is_get_request = True
     articles_by_language = Article.objects.filter(translation__language=request.LANGUAGE_CODE)
     articles_by_language_and_tag = articles_by_language.filter(tags__slug__in=selected_tags).distinct()
     articles = create_article_list(articles_by_language_and_tag, request.LANGUAGE_CODE)
+    
 
     context = {
         'articles': articles,
+        'selected_tags': selected_tags,
+        'tags': tags,
+        'is_get_request': is_get_request,
     }
     return render(request, 'blog/article_list.html', context)
 
