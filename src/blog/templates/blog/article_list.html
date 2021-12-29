@@ -1,9 +1,10 @@
 {% extends './base.html' %}
 {% load static %}
 {% load thumbnail %}
+{% load i18n %}
 
 {% block content %}
-<h1 class="mt-4 mb-4">List</h1>
+<h1 class="mt-4 mb-4">{% trans "List" %}</h1>
 <div class="row g-5">
     {% for article in articles %}
     <div class="col-12 col-sm-6 col-lg-4">
