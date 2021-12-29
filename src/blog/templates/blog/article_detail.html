@@ -1,0 +1,10 @@
+{% extends './base.html' %}
+{% load static %}
+
+{% block content %}
+<h5><a href="/">&lt; back</a></h5>
+<h1 class="mt-4 mb-4">Detail</h1>
+<img class="img-fluid mb-3" src={{ article.image }} alt={{ article.slug }}>
+<h5 class="card-title">{{ article.title }}</h5>
+<p class="card-text">{{ article.content | safe }}</p>
+{% endblock content %}

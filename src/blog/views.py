@@ -1,5 +1,6 @@
-from django.shortcuts import render
-from blog.models import Article
+from django.http.response import Http404
+from django.shortcuts import render, get_object_or_404
+from blog.models import Article, Translation
 import logging
 logger = logging.getLogger(__name__)
 
@@ -25,3 +26,18 @@ def article_list(request):
         'articles': articles,
     }
     return render(request, 'blog/article_list.html', context)
+
+
+def article_detail(request, slug):
+    try:
+        article = Article.objects.get(translation__slug=slug)
+        language = Translation.objects.get(slug=slug).language
+        context = {
+            'content': article.translation.get(language=language).content,
+            'image': f'/media/{article.image}',
+            'slug': slug,
+            'title': slug.replace('-', ' ').title(),
+        }
+    except Article.DoesNotExist:
+        raise Http404
+    return render(request, "blog/article_detail.html", {'article': context})
