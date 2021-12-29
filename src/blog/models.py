@@ -4,10 +4,12 @@ from django.utils.translation import gettext_lazy as _
 from ckeditor.fields import RichTextField
 from taggit.managers import TaggableManager
 from django.conf import settings
+from easy_thumbnails.fields import ThumbnailerImageField
 
 
 class Article(models.Model):
-    image = models.ImageField()
+    # image = models.ImageField()
+    image = ThumbnailerImageField(upload_to='photos', blank=True)
     tags = TaggableManager()
     creation_date = models.DateTimeField(auto_now_add=True)
 

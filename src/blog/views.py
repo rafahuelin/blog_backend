@@ -14,7 +14,7 @@ def create_article_list(articles, language):
             'slug': slug,
             'title': slug.replace('-', ' ').title(),
             'content': article.translation.get(language=language).content,
-            'image': f'media/{article.image}'
+            'image': f'{article.image["thumbnail"].url}'
         })
     return articles_list
 

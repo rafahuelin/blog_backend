@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
     # 3rd party
     'ckeditor',
+    'easy_thumbnails',
     'taggit',
 
     # custom apps
@@ -146,3 +147,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Django-taggit
 TAGGIT_CASE_INSENSITIVE = True
+
+
+# Easy-thumbnails
+THUMBNAIL_ALIASES = {
+    '': {
+        'thumbnail': {'size': (200, 200), 'crop': True},
+    },
+}
