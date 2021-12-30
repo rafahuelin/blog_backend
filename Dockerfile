@@ -7,6 +7,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends postgresql-clie
 RUN mkdir -p /var/src/assets
 WORKDIR /var/src
 
+# ***** debug requirements.txt does not exist
+RUN ls -lha
+
 # install dependencies
 COPY requirements.txt /var/src
 RUN pip install -r requirements.txt
