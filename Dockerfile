@@ -17,7 +17,7 @@ COPY . /var/src
 # run Django management commands at start
 RUN python manage.py collectstatic --no-input
 
-# expose the port 80
-EXPOSE 80
+# expose the port 8000
+EXPOSE 8000
 
-CMD ["gunicorn", "config.wsgi", "--bind", "0.0.0.0:80", "--chdir", "/var/src/config/", "--reload"]
+CMD ["gunicorn", "config.wsgi", "--bind", "0.0.0.0:8000", "--chdir", "/var/src/config/", "--reload"]
