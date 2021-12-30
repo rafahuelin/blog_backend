@@ -78,7 +78,7 @@ DATABASES = {
     'NAME': 'database1',
     'USER': 'database1_role',
     'PASSWORD': 'database1_password',
-    'HOST': 'database1',  # <-- IMPORTANT: same name as docker-compose service!
+    'HOST': 'db',  # <-- IMPORTANT: same name as docker-compose service!
     'PORT': '5432',
     }
 }

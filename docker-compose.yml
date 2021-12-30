@@ -14,13 +14,13 @@ services:
       - nginx_network
       - database1_network
     depends_on:
-      - database1
+      - db
 
-  nginx:
+  web:
     image: nginx:1.15
-    container_name: nginx
+    container_name: web
     ports:
-      - 80:8000
+      - 80:80
     volumes:
       - ./nginx:/etc/nginx/conf.d
       - ./logs/nginx:/var/log/nginx
@@ -31,7 +31,7 @@ services:
     networks:
       - nginx_network  
 
-  database1:  # <-- IMPORTANT: same name as in Djano settings.py, otherwise Django won't find the database!
+  db:  # <-- IMPORTANT: same name as in Djano settings.py, otherwise Django won't find the database!
     image: postgres:13.5
     container_name: database1
     env_file:  # <-- match values to Djano settings.py

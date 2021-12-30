@@ -18,6 +18,6 @@ COPY . /var/src
 RUN python manage.py collectstatic --no-input
 
 # expose the port 8000
-EXPOSE 8000
+EXPOSE 80
 
 CMD ["gunicorn", "config.wsgi", "--bind", "0.0.0.0:8000", "--chdir", "/var/src/config/", "--reload"]
