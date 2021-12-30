@@ -1,8 +1,12 @@
 # Folders
 .venv/
 **/__pycache__/
+
+# Django
 /static_volume/
 /media_volume/
+
+# Ningx
 /logs/
 
 # DB

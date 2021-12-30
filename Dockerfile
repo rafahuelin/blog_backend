@@ -4,7 +4,7 @@ ENV PYTHONUNBUFFERED 1
 
 RUN apt-get update && apt-get install -y --no-install-recommends postgresql-client
 
-RUN mkdir -p /var/src
+RUN mkdir -p /var/src/assets
 WORKDIR /var/src
 
 # install dependencies
@@ -17,7 +17,7 @@ COPY . /var/src/
 # run Django management commands at start
 RUN python manage.py collectstatic --no-input
 
-# expose the port 8000
-EXPOSE 8000
+# expose the port 80
+EXPOSE 80
 
-CMD ["gunicorn", "config.wsgi", "--bind", "0.0.0.0:8000", "--chdir", "/var/src/config/", "--reload"]
+CMD ["gunicorn", "config.wsgi", "--bind", "0.0.0.0:80", "--chdir", "/var/src/config/", "--reload"]
