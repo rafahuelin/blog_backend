@@ -1,8 +1,11 @@
 # Folders
 .venv/
 **/__pycache__/
-**/media/
-**/static/
+/static_volume/
+/media_volume/
+/logs/
 
 # DB
 *.sqlite3
+
+.env
