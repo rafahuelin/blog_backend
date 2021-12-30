@@ -2,16 +2,17 @@ FROM python:3.9.9
 
 ENV PYTHONUNBUFFERED 1
 
+ADD . /var/src
+
+RUN ls -lha /var/src
+
 RUN apt-get update && apt-get install -y --no-install-recommends postgresql-client
 
 RUN mkdir -p /var/src/assets
 WORKDIR /var/src
 
-# ***** debug requirements.txt does not exist
-RUN ls -lha
-
 # install dependencies
-COPY requirements.txt /var/src
+COPY ./requirements.txt /var/src
 RUN pip install -r requirements.txt
 
 # copy project code
