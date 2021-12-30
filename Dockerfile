@@ -12,7 +12,7 @@ COPY requirements.txt /var/src
 RUN pip install -r requirements.txt
 
 # copy project code
-COPY . /var/src/assets
+COPY . /var/src
 
 # run Django management commands at start
 RUN python manage.py collectstatic --no-input
