@@ -1,11 +1,1 @@
-# Folders
-.venv/
-**/__pycache__/
-/static_volume/
-/media_volume/
-/logs/
-
-# DB
-*.sqlite3
-
-.env
+.divio
