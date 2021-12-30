@@ -14,3 +14,6 @@
 
 .env
 .divio
+
+# Development
+/dev/

@@ -2,7 +2,7 @@ FROM python:3.9.9
 
 ENV PYTHONUNBUFFERED 1
 
-ADD . /var/src
+ADD src /var/src
 
 RUN ls -lha /var/src
 
@@ -12,7 +12,7 @@ RUN mkdir -p /var/src/assets
 WORKDIR /var/src
 
 # install dependencies
-COPY ./requirements.txt /var/src
+# COPY ./requirements.txt /var/src
 RUN pip install -r requirements.txt
 
 # copy project code
