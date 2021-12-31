@@ -1,6 +1,8 @@
 import os
 from pathlib import Path
 from django.utils.translation import gettext_lazy as _
+import dj_database_url
+from django_storage_url import dsn_configured_storage_class
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -13,10 +15,24 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'l*l&#i%b+a-%99o+6sp6b3dn49mwu4oa1n6e)b4xrirb3$t6=a'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG') == "True"
 
-ALLOWED_HOSTS = ['*', ]
+DIVIO_DOMAIN = os.environ.get('DOMAIN', '')
+DIVIO_DOMAIN_ALIASES = [
+    d.strip()
+    for d in os.environ.get('DOMAIN_ALIASES', '').split(',')
+    if d.strip()
+]
+DIVIO_DOMAIN_REDIRECTS = [
+    d.strip()
+    for d in os.environ.get('DOMAIN_REDIRECTS', '').split(',')
+    if d.strip()
+]
 
+ALLOWED_HOSTS = [DIVIO_DOMAIN] + DIVIO_DOMAIN_ALIASES + DIVIO_DOMAIN_REDIRECTS
+
+# Redirect to HTTPS by default, unless explicitly disabled
+SECURE_SSL_REDIRECT = os.environ.get('SECURE_SSL_REDIRECT') != "False"
 
 # Application definition
 
@@ -39,6 +55,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -72,16 +89,22 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-'default': {
-    'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    'NAME': 'database1',
-    'USER': 'database1_role',
-    'PASSWORD': 'database1_password',
-    'HOST': 'db',  # <-- IMPORTANT: same name as docker-compose service!
-    'PORT': '5432',
-    }
-}
+# DATABASES = {
+# 'default': {
+#     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#     'NAME': 'database1',
+#     'USER': 'database1_role',
+#     'PASSWORD': 'database1_password',
+#     'HOST': 'db',  # <-- IMPORTANT: same name as docker-compose service!
+#     'PORT': '5432',
+#     }
+# }
+
+# Configure database using DATABASE_URL; fall back to sqlite in memory when no
+# environment variable is available, e.g. during Docker build
+DATABASE_URL = os.environ.get('DATABASE_URL', 'sqlite://:memory:')
+
+DATABASES = {'default': dj_database_url.parse(DATABASE_URL)}
 
 
 # Password validation
@@ -125,13 +148,32 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'assets']
-STATIC_ROOT = BASE_DIR / 'static'
-VENV_PATH = BASE_DIR
-MEDIA_URL = '/media/'
-MEDIA_ROOT = VENV_PATH / 'media'
+# STATIC_URL = '/static/'
+# STATICFILES_DIRS = [BASE_DIR / 'assets']
+# STATIC_ROOT = BASE_DIR / 'static'
+# VENV_PATH = BASE_DIR
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = VENV_PATH / 'media'
 
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Media files
+# DEFAULT_FILE_STORAGE is configured using DEFAULT_STORAGE_DSN
+
+# read the setting value from the environment variable
+DEFAULT_STORAGE_DSN = os.environ.get('DEFAULT_STORAGE_DSN')
+
+# dsn_configured_storage_class() requires the name of the setting
+DefaultStorageClass = dsn_configured_storage_class('DEFAULT_STORAGE_DSN')
+
+# Django's DEFAULT_FILE_STORAGE requires the class name
+DEFAULT_FILE_STORAGE = 'config.settings.DefaultStorageClass'
+
+# only required for local file storage and serving, in development
+MEDIA_URL = 'media/'
+MEDIA_ROOT = os.path.join('/data/media/')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

@@ -11,6 +11,7 @@
 
 # DB
 *.sqlite3
+/postgres/
 
 .env
 .divio
