@@ -1,5 +1,4 @@
 from django.db import models
-from django.db.models.deletion import DO_NOTHING
 from django.utils.translation import gettext_lazy as _
 from ckeditor.fields import RichTextField
 from taggit.managers import TaggableManager
@@ -18,7 +17,7 @@ class Article(models.Model):
 
 
 class Translation(models.Model):
-    article = models.ForeignKey(Article, on_delete=DO_NOTHING, null=True, related_name='translation')
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, null=True, related_name='translation')
     slug = models.SlugField(max_length=255)
     content = RichTextField()
     language = models.CharField(max_length=30, choices=settings.LANGUAGES)
