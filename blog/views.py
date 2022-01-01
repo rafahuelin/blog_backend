@@ -53,7 +53,7 @@ def article_detail(request, slug):
         context = {
             'content': article.translation.get(language=language).content,
             'creation_date': article.creation_date,
-            'image': f'/media/{article.image}',
+            'image': f'{article.image.url}',
             'slug': slug,
             'title': slug.replace('-', ' ').title(),
         }

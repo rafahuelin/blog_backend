@@ -5,6 +5,10 @@
 # Django
 /static_volume/
 /media_volume/
+/media/
+/static/
+/data/
+/staticfiles/
 
 # Ningx
 /logs/

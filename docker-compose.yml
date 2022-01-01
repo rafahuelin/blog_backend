@@ -15,7 +15,7 @@ services:
     # the URL 'postgres' or 'mysql' will point to the application's db service
     links:
       - "database_default"
-    env_file: .env-local
+    env_file: ".env-local"
     depends_on:
       - database_default
 
