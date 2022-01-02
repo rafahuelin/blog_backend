@@ -17,7 +17,9 @@
 *.sqlite3
 /postgres/
 
+# Environment
 .env
+.env-local
 .divio
 
 # Development
