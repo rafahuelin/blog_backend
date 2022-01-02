@@ -7,7 +7,6 @@ from easy_thumbnails.fields import ThumbnailerImageField
 
 
 class Article(models.Model):
-    # image = models.ImageField()
     image = ThumbnailerImageField(upload_to='photos', blank=True)
     tags = TaggableManager()
     creation_date = models.DateTimeField(auto_now_add=True)

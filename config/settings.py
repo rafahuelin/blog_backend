@@ -92,17 +92,6 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-# DATABASES = {
-# 'default': {
-#     'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#     'NAME': 'database1',
-#     'USER': 'database1_role',
-#     'PASSWORD': 'database1_password',
-#     'HOST': 'db',  # <-- IMPORTANT: same name as docker-compose service!
-#     'PORT': '5432',
-#     }
-# }
-
 # Configure database using DATABASE_URL; fall back to sqlite in memory when no
 # environment variable is available, e.g. during Docker build
 DATABASE_URL = os.environ.get('DATABASE_URL', 'sqlite://:memory:')
@@ -150,13 +139,6 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
-
-# STATIC_URL = '/static/'
-# STATICFILES_DIRS = [BASE_DIR / 'assets']
-# STATIC_ROOT = BASE_DIR / 'static'
-# VENV_PATH = BASE_DIR
-# MEDIA_URL = '/media/'
-# MEDIA_ROOT = VENV_PATH / 'media'
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')

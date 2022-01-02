@@ -1,5 +1,5 @@
 from django.http.response import Http404
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from taggit.models import Tag
 from blog.models import Article, Translation
 import logging
@@ -49,7 +49,10 @@ def article_list(request):
 def article_detail(request, slug):
     try:
         article = Article.objects.get(translation__slug=slug)
-        language = Translation.objects.get(slug=slug).language
+        lang_slug = article.translation.get(language=request.LANGUAGE_CODE).slug
+        if slug != lang_slug:
+            return redirect(f'/{lang_slug}')
+        language = Translation.objects.get(slug=lang_slug).language
         context = {
             'content': article.translation.get(language=language).content,
             'creation_date': article.creation_date,
