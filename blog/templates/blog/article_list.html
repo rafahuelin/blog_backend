@@ -4,7 +4,25 @@
 {% load i18n %}
 
 {% block content %}
-<h1 class="mt-4 mb-4">{% trans "List" %}</h1>
+
+<div class="row">
+    <h1 class="mt-4 mb-4 col-6">{% trans "List" %}</h1>
+    <form action="{% url 'set_language' %}" method="post" class="col-6 mt-4">{% csrf_token %}
+        <input name="next" type="hidden" value="{{ redirect_to }}">
+        <select name="language">
+            {% get_current_language as LANGUAGE_CODE %}
+            {% get_available_languages as LANGUAGES %}
+            {% get_language_info_list for LANGUAGES as languages %}
+            {% for language in languages %}
+                <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
+                    {{ language.name_local }} ({{ language.code }})
+                </option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Go">
+    </form>
+</div>
+
 <div class="row">
     <div class="col-12 col-lg-2 mb-3">
         <form action="{% url 'article_list' %}" method=POST>
@@ -23,7 +41,7 @@
                 </label>
             </div>
             {% endfor %}
-            <button class="btn btn-outline-primary mt-2" type="submit">Filter by tag</button>
+            <button class="btn btn-outline-primary mt-2" type="submit">{% trans "Filter by tag" %}</button>
         </form>
     </div>
 
