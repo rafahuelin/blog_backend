@@ -1,14 +1,29 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from ckeditor.fields import RichTextField
-from taggit.managers import TaggableManager
 from django.conf import settings
 from easy_thumbnails.fields import ThumbnailerImageField
 
 
+class Tag(models.Model):
+    name = models.CharField(max_length=30)
+
+    def __str__(self) -> str:
+        return self.name
+
+
+class TagTranslation(models.Model):
+    tag = models.ForeignKey(Tag, on_delete=models.CASCADE, null=True, related_name='translation')
+    language = models.CharField(max_length=30, choices=settings.LANGUAGES)
+    translation = models.CharField(max_length=255)
+
+    def __str__(self) -> str:
+        return f'{self.tag.name} -> {self.translation} ({self.language})'
+
+
 class Article(models.Model):
     image = ThumbnailerImageField(upload_to='photos', blank=True)
-    tags = TaggableManager()
+    tags = models.ManyToManyField(Tag)
     creation_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:

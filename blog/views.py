@@ -1,8 +1,7 @@
 from django.http.response import Http404
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from taggit.models import Tag
-from blog.models import Article, Translation
+from blog.models import Article, Translation, Tag, TagTranslation
 import logging
 logger = logging.getLogger(__name__)
 
@@ -21,21 +20,33 @@ def create_article_list(articles, language):
     return articles_list
 
 
+def get_translation(tag, lang):
+    return TagTranslation.objects.get(tag_id=tag.id, language=lang).translation
+
+
 def article_list(request):
     all_tags = Tag.objects.all()
-    tags = [{ 'name': t.slug, 'selected': True } for t in all_tags ]
+    lang_code = request.LANGUAGE_CODE
+    from logging import getLogger
+    logger = getLogger(__name__)
+    
+    tags = [{
+        'name': t.name,
+        'selected': True,
+        'translation': get_translation(t, lang_code) } for t in all_tags ]
     selected_tags = []
     is_get_request = False
     if request.method == 'POST':
         for tag in tags:
-            tag_value = request.POST.get(tag['name'])
-            selected = tag_value == 'on'
+            tag_name = request.POST.get(tag['name'])
+            selected = tag_name == 'on'
             tag['selected'] = selected
             if selected: selected_tags.append(tag['name'])
     elif request.method == 'GET':
-        selected_tags = [t.slug for t in all_tags]
+        selected_tags = [t.name for t in all_tags]
+
     articles_by_language = Article.objects.filter(translation__language=request.LANGUAGE_CODE)
-    articles_by_language_and_tag = articles_by_language.filter(tags__slug__in=selected_tags).distinct()
+    articles_by_language_and_tag = articles_by_language.filter(tags__name__in=selected_tags).distinct()
     articles = create_article_list(articles_by_language_and_tag, request.LANGUAGE_CODE)
 
     context = {

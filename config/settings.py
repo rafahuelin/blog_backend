@@ -50,7 +50,6 @@ INSTALLED_APPS = [
     # 3rd party
     'ckeditor',
     'easy_thumbnails',
-    'taggit',
 
     # custom apps
     'blog.apps.BlogConfig',

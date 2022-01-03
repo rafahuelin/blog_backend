@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Article, Translation
+from .models import Article, Translation, Tag, TagTranslation
 from logging import getLogger
 
 logger = getLogger(__name__)
@@ -32,3 +32,5 @@ class ArticleAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Article, ArticleAdmin)
+admin.site.register(Tag)
+admin.site.register(TagTranslation)
